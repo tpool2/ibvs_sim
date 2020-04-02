@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10.2)
 project(ibvs_sim)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -9,6 +9,9 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+message("Before find_package catkin")
+message("UUID_INCLUDE_DIRS: ${UUID_INCLUDE_DIRS}")
+message("UUID_LIBRARIES: ${UUID_LIBRARIES}")
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   nav_msgs
@@ -22,12 +25,24 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   sensor_msgs
 )
+message("After find_package catkin")
+message("UUID_INCLUDE_DIRS: ${UUID_INCLUDE_DIRS}")
+message("UUID_LIBRARIES: ${UUID_LIBRARIES}")
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
 find_package(Eigen REQUIRED)
+message("After find_package Eigen")
+#set(UUID_LIBRARIES "")
+message("UUID_INCLUDE_DIRS: ${UUID_INCLUDE_DIRS}")
+message("UUID_LIBRARIES: ${UUID_LIBRARIES}")
+message("CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 find_package(gazebo REQUIRED)
+message("After find_package gazebo")
+message("UUID_INCLUDE_DIRS: ${UUID_INCLUDE_DIRS}")
+message("UUID_LIBRARIES: ${UUID_LIBRARIES}")
+#ign_import_target(UUID)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
