@@ -29,6 +29,7 @@
 #include <geometry_msgs/Vector3.h>
 
 #include "common.h"
+#include "gz_compat.h"
 
 namespace gazebo {
 

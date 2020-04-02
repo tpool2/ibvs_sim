@@ -1,7 +1,7 @@
 IBVS Sim ROS Package
 ====================
 
-This package contains source files needed to simulate multirotor precision landings using image-based visual servoing. Simulations for landing on stationary ground targets, and moving targets exhibiting ship-like motion are included. The simulation environment is ROS/Gazebo. Also included in this repository are launch files for performing precision landings in hardware using a PX4-enabled multirotor. Use of this package assumes you have installed Ubuntu 16.04 LTS, ROS Kinetic, and Gazebo.
+This package contains source files needed to simulate multirotor precision landings using image-based visual servoing. Simulations for landing on stationary ground targets, and moving targets exhibiting ship-like motion are included. The simulation environment is ROS/Gazebo. Also included in this repository are launch files for performing precision landings in hardware using a PX4-enabled multirotor. Use of this package assumes you have installed Ubuntu 18.04 LTS, ROS Melodic, and Gazebo 9.
 
 ## Workspace Setup ##
 
@@ -24,6 +24,11 @@ cd ../..
 Then run `catkin_make`
 
 Don't forget to source your workspace.
+
+Also do `pip install pyqtgraph --user`
+Scipy is a python package needed for python2 and python3 scripts found in this repository and roscopter. To ensure that your installation of scipy is compatible with both, do `pip install scipy=1.2 --user` 
+
+Also edit `~/.ignition/fuel/config.yaml` using your favorite text editor so that the website is not `https://api.ignitionfuel.org` but rather `https://api.ignitionrobotics.org`
 
 
 ## Simulating Landing on a Stationary Ground Target ##

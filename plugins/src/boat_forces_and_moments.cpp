@@ -26,8 +26,8 @@ BoatForcesAndMoments::BoatForcesAndMoments() {
 }
 
 BoatForcesAndMoments::~BoatForcesAndMoments() {
+  GZ_COMPAT_DISCONNECT_WORLD_UPDATE_BEGIN(updateConnection_);
   // event::Events::DisconnectWorldUpdateBegin(updateConnection_);
-  updateConnection_ = NULL;
   if (nh_) {
     nh_->shutdown();
     delete nh_;
@@ -37,9 +37,9 @@ BoatForcesAndMoments::~BoatForcesAndMoments() {
 void BoatForcesAndMoments::SendForces() // apply forces and torques to joint
 {
   link_->AddForce(
-      ignition::math::Vector3<double>(actual_forces_.Fx, actual_forces_.Fy, actual_forces_.Fz));
+      GazeboVector(actual_forces_.Fx, actual_forces_.Fy, actual_forces_.Fz));
   link_->AddRelativeTorque(
-      ignition::math::Vector3<double>(actual_forces_.l, actual_forces_.m, actual_forces_.n));
+      GazeboVector(actual_forces_.l, actual_forces_.m, actual_forces_.n));
 }
 
 void BoatForcesAndMoments::Load(physics::ModelPtr _model,
@@ -164,23 +164,23 @@ void BoatForcesAndMoments::UpdateForcesAndMoments() {
    * C denotes child frame, P parent frame, and W world frame.  *
    * Further C_pose_W_P denotes pose of P wrt. W expressed in C.*/
 
-  ignition::math::Pose3d W_pose_W_C = link_->WorldCoGPose();
-  double pn = W_pose_W_C.Pos().X();
-  double pe = W_pose_W_C.Pos().Y();
-  double pd = W_pose_W_C.Pos().Y();
-  ignition::math::Vector3<double> euler_angles = W_pose_W_C.Rot().Euler();
-  double phi = euler_angles.X();   // roll
-  double theta = euler_angles.Y(); // pitch
-  double psi = euler_angles.Z();   // yaw, wrapped between -pi and pi
+  GazeboPose W_pose_W_C = GZ_COMPAT_GET_WORLD_COG_POSE(link_);
+  double pn = GZ_COMPAT_GET_X(GZ_COMPAT_GET_POS(W_pose_W_C));
+  double pe = GZ_COMPAT_GET_Y(GZ_COMPAT_GET_POS(W_pose_W_C));
+  double pd = GZ_COMPAT_GET_Z(GZ_COMPAT_GET_POS(W_pose_W_C));
+  GazeboVector euler_angles = GZ_COMPAT_GET_EULER(GZ_COMPAT_GET_ROT(W_pose_W_C));
+  double phi = GZ_COMPAT_GET_X(euler_angles);   // roll
+  double theta = GZ_COMPAT_GET_Y(euler_angles); // pitch
+  double psi = GZ_COMPAT_GET_Z(euler_angles);   // yaw, wrapped between -pi and pi
 
-  ignition::math::Vector3<double> C_linear_velocity_W_C = link_->RelativeLinearVel();
-  double u = C_linear_velocity_W_C.X();
-  double v = C_linear_velocity_W_C.Y();
-  double w = C_linear_velocity_W_C.Z();
-  ignition::math::Vector3<double> C_angular_velocity_W_C = link_->RelativeAngularVel();
-  double p = C_angular_velocity_W_C.X();
-  double q = C_angular_velocity_W_C.Y();
-  double r = C_angular_velocity_W_C.Z();
+  GazeboVector C_linear_velocity_W_C = GZ_COMPAT_GET_RELATIVE_LINEAR_VEL(link_);
+  double u = GZ_COMPAT_GET_X(C_linear_velocity_W_C);
+  double v = GZ_COMPAT_GET_Y(C_linear_velocity_W_C);
+  double w = GZ_COMPAT_GET_Z(C_linear_velocity_W_C);
+  GazeboVector C_angular_velocity_W_C = GZ_COMPAT_GET_RELATIVE_ANGULAR_VEL(link_);
+  double p = GZ_COMPAT_GET_X(C_angular_velocity_W_C);
+  double q = GZ_COMPAT_GET_Y(C_angular_velocity_W_C);
+  double r = GZ_COMPAT_GET_Z(C_angular_velocity_W_C);
 
   // Calculate the appropriate control
   if (command_.position.x == -9999.0) {
